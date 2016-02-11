@@ -173,12 +173,12 @@ else
 }
 Add-Content "$env:APPDATA\pip\pip.ini" $pip_conf_content
 
-& easy_install -U pip
-& pip install -U setuptools
-& pip install -U pymi
-& pip install cffi
-& pip install numpy
-& pip install -U cliff==1.15.0
+Exec-EasyInstall -Upgrade pip
+Exec-PipInstall -upgrade setuptools
+Exec-PipInstall -upgrade pymi
+Exec-PipInstall cffi
+Exec-PipInstall numpy
+Exec-PipInstall -upgrade cliff==1.15.0
 popd
 
 $hasPipConf = Test-Path "$env:APPDATA\pip"
@@ -206,12 +206,12 @@ function cherry_pick($commit) {
 }
 
 ExecRetry {
-    & pip install C:\OpenStack\build\openstack\os-win
+    Exec-PipInstall C:\OpenStack\build\openstack\os-win
     if ($LastExitCode) { Throw "Failed to install os-win from repo" }
 }
 
 ExecRetry {
-    & pip install C:\OpenStack\build\openstack\neutron
+    Exec-PipInstall C:\OpenStack\build\openstack\neutron
     if ($LastExitCode) { Throw "Failed to install neutron from repo" }
 }
 
@@ -221,7 +221,7 @@ ExecRetry {
     Write-Host "Doing fetch... refs/changes/28/265728/7"
     git fetch https://review.openstack.org/openstack/nova refs/changes/28/265728/7
     cherry_pick FETCH_HEAD
-    & pip install C:\OpenStack\build\openstack\networking-hyperv
+    Exec-PipInstall C:\OpenStack\build\openstack\networking-hyperv
     if ($LastExitCode) { Throw "Failed to install networking-hyperv from repo" }
 }
 
@@ -230,7 +230,7 @@ ExecRetry {
     Write-Host "Cherry-picking refs/changes/33/237133/2 - serial log issue"
     git fetch https://review.openstack.org/openstack/nova refs/changes/33/237133/2
     git cherry-pick FETCH_HEAD
-    & pip install C:\OpenStack\build\openstack\nova
+    Exec-PipInstall C:\OpenStack\build\openstack\nova
     if ($LastExitCode) { Throw "Failed to install nova fom repo" }
     popd
 }
